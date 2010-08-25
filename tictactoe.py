@@ -17,7 +17,7 @@
 
 import sys
 
-grid=' ' * 9
+grid=['_'] * 9
 
 # sets of winning positions
 winning_pos = (
@@ -31,6 +31,7 @@ winning_pos = (
     [0,3,6], [1,4,7], [2,5,8],
 )
 
+centerpos = 4
 corners = [0,2,6,8]
 middles = [1,3,5,7]
 adjacent_corners = { 0:[2,6], 2:[0,8], 6:[0,8], 8:[2,6] }
@@ -39,7 +40,7 @@ opposite_corners = { 0: 8, 2:6, 6:2, 8:0 }
 
 
 def init():
-    grid= '_' * 3 * 3
+    grid= ['_'] * 3 * 3
 
 
 def is_oob(n):
@@ -168,14 +169,23 @@ def strat_block():
             return True
     return False
 
-def strat_fork():
+def strat_fork_center():
     return False
+
+def strat_fork_corner():
+    return False
+
+def strat_fork():
+    if grid[centerpos] == 'X': # do I own the center?
+        if strat_fork_center():
+            return True
+    # otherwise, do I have one of the corners to build a fork
+    return strat_fork_corner()
 
 def strat_fork_block():
     return False
 
 def strat_center():
-    centerpos = 4
     if grid[centerpos] not in ('X', 'O'):
         grid[centerpos] = 'X'
         print "4. CENTER computer puts 'X' in %d" % centerpos
@@ -183,6 +193,11 @@ def strat_center():
     return False
 
 def strat_opposite_corner():
+    for pos in opposite_corners.keys(): # the four corners
+        if grid[pos] == 'O' and grid[opposite_corners[pos]] not in ('O', 'X'):
+            grid[opposite_corners[pos]] = 'X'
+            print "5. OPPOSITE CORNER computer puts 'X' in %d" % opposite_corners[pos]
+            return True
     return False
 
 def strat_empty_corner():
@@ -194,6 +209,11 @@ def strat_empty_corner():
     return False
 
 def strat_empty_side():
+    for pos in middles: # the middles of each side
+        if grid[pos] not in ('X', 'O'):
+            grid[pos] = 'X'
+            print "7. EMPTY SIDE computer puts 'X' in %d" % pos
+            return True
     return False
 
 
@@ -204,7 +224,15 @@ def computer_move(): # plays 'X'
         print "ERROR, computer did not move !!!!!!!"
     return
 
+def print_grid():
+    print "   | ABC "
+    print "---+-----"
+    for i in range(3):
+        print " %d |" % (i+1),
+        print ''.join(grid[i*3:i*3+3])
+
 def human_move():
+    print_grid()
     while True:
         print "Your Move",
         pos = raw_input()

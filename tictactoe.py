@@ -117,6 +117,14 @@ def check_draw(): # assumes check_game_won is false
     print "Game is a draw, nobody wins"
     return True
 
+
+def strat_start():  # if the board is empty, start with a corner
+    for i in range(9):
+        if grid[i] in ('X', 'O'):
+            return False
+    grid[0] = 'X'
+    return True
+
 def strat_win():
     # already two in a winning set?
     for triple in winning_pos:
@@ -167,12 +175,22 @@ def strat_fork_block():
     return False
 
 def strat_center():
+    centerpos = 4
+    if grid[centerpos] not in ('X', 'O'):
+        grid[centerpos] = 'X'
+        print "4. CENTER computer puts 'X' in %d" % centerpos
+        return True
     return False
 
 def strat_opposite_corner():
     return False
 
 def strat_empty_corner():
+    for pos in corners: # the four corners
+        if grid[pos] not in ('X', 'O'):
+            grid[pos] = 'X'
+            print "6. EMPTY CORNER computer puts 'X' in %d" % pos
+            return True
     return False
 
 def strat_empty_side():
@@ -180,7 +198,7 @@ def strat_empty_side():
 
 
 def computer_move(): # plays 'X'
-    if strat_win() or strat_block() or strat_fork() or strat_fork_block() or strat_center() or strat_opposite_corner() or strat_empty_corner() or strat_empty_side(): # use short-circuiting
+    if strat_start() or strat_win() or strat_block() or strat_fork() or strat_fork_block() or strat_center() or strat_opposite_corner() or strat_empty_corner() or strat_empty_side(): # use short-circuiting
         return
     else:
         print "ERROR, computer did not move !!!!!!!"

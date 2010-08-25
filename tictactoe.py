@@ -113,28 +113,28 @@ def check_draw(): # assumes check_game_won is false
     return True
 
 def strat_win():
-    pass
+    return False
 
 def strat_block():
-    pass
+    return False
 
 def strat_fork():
-    pass
+    return False
 
 def strat_fork_block():
-    pass
+    return False
 
 def strat_center():
-    pass
+    return False
 
 def strat_opposite_corner():
-    pass
+    return False
 
 def strat_empty_corner():
-    pass
+    return False
 
 def strat_empty_side():
-    pass
+    return False
 
 
 def computer_move(): # plays 'X'
@@ -165,6 +165,10 @@ def human_move():
             continue
         grid[n] = 'O'
         break
+
+print "Welcome to Tic-Tac-Toe."
+print "The computer plays as 'X', and you will play as 'O'"
+print "To place your mark ('O'), select an empty field using x/y coordinates, \n\tfor example: A1 or C2 or B3"
 
 init()
 while True:

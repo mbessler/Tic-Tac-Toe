@@ -9,6 +9,11 @@
 #  * http://en.wikipedia.org/wiki/Tic-tac-toe
 #  * http://www.students.stedwards.edu/ccella/freeprog.html
 #
+# In the game of Tic-Tac-Toe, nobody can actually ever win if two equally strong opponents play against each other and both get to start the same number of rounds. 
+# However, as the challenge calls for 'to never lose', this is possible since this does allow for a draw.
+# 
+# The 1983 film 'WarGames' used this theme to teach a military computer controlling nuclear warheads that there can be no winner.
+#
 
 import sys
 
@@ -113,9 +118,46 @@ def check_draw(): # assumes check_game_won is false
     return True
 
 def strat_win():
+    # already two in a winning set?
+    for triple in winning_pos:
+        i_have = 0
+        you_have = 0
+        put_pos = -1
+        for pos in triple:
+            if grid[pos] == 'X':
+                i_have += 1
+            elif grid[pos] == 'O':
+                you_have += 1
+            else:
+                put_pos = pos
+        if you_have == 0 and i_have == 2:
+            # I win
+            for pos in triple:
+                grid[pos] = 'X'
+            print "1. WIN computer puts 'X' in %d" % put_pos
+            return True
     return False
 
 def strat_block():
+    # if opponent has already two in a winning set, block him
+    for triple in winning_pos:
+        i_have = 0
+        you_have = 0
+        put_pos = -1
+        for pos in triple:
+            if grid[pos] == 'X':
+                i_have += 1
+            elif grid[pos] == 'O':
+                you_have += 1
+            else:
+                put_pos = pos
+        if you_have == 2 and i_have == 0:
+            # I block you
+            for pos in triple:
+                if grid[pos] != 'O':
+                    grid[pos] = 'X'
+            print "2. BLOCK computer puts 'X' in %d" % put_pos
+            return True
     return False
 
 def strat_fork():

@@ -37,6 +37,12 @@ def init():
     grid= '_' * 3 * 3
 
 
+def is_oob(n):
+    if n > 8 or n < 0:
+        return true
+    else:
+        return false
+
 def east_pos(n): # 0-based. -1 == not possible
     if (n+1)%3 != 0:
         return n+1
@@ -106,9 +112,37 @@ def check_draw(): # assumes check_game_won is false
     print "Game is a draw, nobody wins"
     return True
 
+def strat_win():
+    pass
+
+def strat_block():
+    pass
+
+def strat_fork():
+    pass
+
+def strat_fork_block():
+    pass
+
+def strat_center():
+    pass
+
+def strat_opposite_corner():
+    pass
+
+def strat_empty_corner():
+    pass
+
+def strat_empty_side():
+    pass
+
 
 def computer_move(): # plays 'X'
-    pass
+    if strat_win() or strat_block() or strat_fork() or strat_fork_block() or strat_center() or strat_opposite_corner() or strat_empty_corner() or strat_empty_side(): # use short-circuiting
+        return
+    else:
+        print "ERROR, computer did not move !!!!!!!"
+    return
 
 def human_move():
     while True:

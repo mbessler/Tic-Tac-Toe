@@ -17,7 +17,7 @@
 
 import sys
 
-grid=['_'] * 9
+grid = ['_'] * 9
 
 # sets of winning positions
 winning_pos = (
@@ -170,9 +170,41 @@ def strat_block():
     return False
 
 def strat_fork_center():
+    two_out_of_three = { (0,2):[1,6,8], (0,6):[2,3,8], (2,8):[0,5,6], (6,8):[0,2,7] }
+    for corner in adjacent_corners.keys(): # find one corner where we already placed an 'X'
+        if grid[corner] == 'X':
+            for other_corner in adjacent_corners[corner]: # find an adjacent corner thats still empty
+                if grid[other_corner] not in ('X', 'O'):
+                    key = (corner,other_corner) if (corner<other_corner) else (other_corner,corner) # adjust for lookup
+                    # check if we can still get at least two of three from the fields in the list to make a fork
+                    toot = two_out_of_three[ key ]
+                    i_have_or_avail = 0
+                    for fld in toot:
+                        if grid[fld] != 'O':
+                            i_have_or_avail += 1
+                    if i_have_or_avail >= 2:
+                        grid[other_corner] = 'X'
+                        print "3. FORK CENTER computer puts 'X' in %d" % other_corner
+                        return True
     return False
 
 def strat_fork_corner():
+    for corner in corners:
+        if grid[corner] == 'X': # do I have a corner?
+            for other_corner in adjacent_corners[corner]: # find an adjacent corner thats still empty 
+                if grid[other_corner] not in ('X', 'O'):
+                    key = (corner,other_corner) if (corner<other_corner) else (other_corner,corner) # adjust for lookup
+                    in_between = edge_between_corners[ key ]
+                    if grid[in_between] not in ('X', 'O'):
+                        grid[in_between] = 'X'
+                        print "3. FORK CORNER A computer puts 'X' in %d" % in_between
+                        return True
+    for corner in corners:  # similar to above, but check opposite corner and center for availability
+        if grid[corner] == 'X': # do I have a corner?
+            if grid[centerpos] not in ('X', 'O') and opposite_corners[corner] not in ('X', 'O'): # get opposite corner
+                grid[opposite_corners[corner]] = 'X'
+                print "3. FORK CORNER B computer puts 'X' in %d" % opposite_corners[corner]
+                return True
     return False
 
 def strat_fork():
@@ -254,11 +286,21 @@ def human_move():
         grid[n] = 'O'
         break
 
+def who_starts():
+    while True:
+        print "Who will start, the computer ('X') or you ('O')? [X/O] ?",
+        inp = raw_input()
+        if inp in ('X', 'O'):
+            return inp
+
 print "Welcome to Tic-Tac-Toe."
 print "The computer plays as 'X', and you will play as 'O'"
 print "To place your mark ('O'), select an empty field using x/y coordinates, \n\tfor example: A1 or C2 or B3"
 
 init()
+starter = who_starts()
+if starter == 'O': # human starts
+    human_move()
 while True:
     computer_move()
     if check_game_won(): break
@@ -267,4 +309,5 @@ while True:
     if check_game_won(): break
     if check_draw(): break
 
+print_grid()
 sys.exit(0)

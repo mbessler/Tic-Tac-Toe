@@ -43,66 +43,6 @@ def init():
     grid= ['_'] * 3 * 3
 
 
-def is_oob(n):
-    if n > 8 or n < 0:
-        return true
-    else:
-        return false
-
-def east_pos(n): # 0-based. -1 == not possible
-    if (n+1)%3 != 0:
-        return n+1
-    else:
-        return -1
-
-def west_pos(n):
-    if n%3 != 0:
-        return n-1
-    else:
-        return -1
-
-def north_pos(n):
-    if n-3 < 0:
-        return -1
-    else:
-        return n-3
-
-def south_pos(n):
-    if n+3 >= 9:
-        return -1
-    else:
-        return n+3
-
-def se_pos(n):
-    s = south_pos(n)
-    if s == -1: 
-        return s
-    e = east_pos(s)
-    return e
-
-def ne_pos(n):
-    n = north_pos(n)
-    if n == -1: 
-        return n
-    e = east_pos(n)
-    return e
-
-def sw_pos(n):
-    s = south_pos(n)
-    if s == -1: 
-        return s
-    w = west_pos(s)
-    return w
-
-def nw_pos(n):
-    n = north_pos(n)
-    if n == -1: 
-        return n
-    w = west_pos(n)
-    return w
-
-
-
 
 def check_game_won():
     for triple in winning_pos:

@@ -214,7 +214,17 @@ def strat_fork():
     # otherwise, do I have one of the corners to build a fork
     return strat_fork_corner()
 
-def strat_fork_block():
+def strat_fork_block():  # block fork possibilities of the opponent
+    block_data = [ [0,8], [2,6] ] # the sets of opposing corners
+    for check in block_data:
+        # this triggers if I have center and opponent has two opposing corners
+        if grid[check[0]] == 'O' and grid[check[1]] == 'O' and grid[centerpos] == 'X':
+            # then I try to find an available edge position, this will block the opponent's fork 
+            for edge in middles:
+                if grid[edge] not in ('X', 'O'):
+                    grid[edge] = 'X'
+                    print "4. BLOCK FORK computer puts 'X' in %d" % edge
+                    return True
     return False
 
 def strat_center():
